@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Medical questions App 2</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General Medical Practitioner Comprehensive Examination Bank</title>
+    <style>
+        :root {
+            --primary-clinical: #1a365d;
+            --primary-accent: #2b6cb0;
+            --accent-hover: #2c5282;
+            --bg-light: #f7fafc;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --correct-green: #38a169;
+            --correct-bg: #f0fff4;
+            --wrong-red: #e53e3e;
+            --wrong-bg: #fff5f5;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            margin: 0;
+            padding: 15px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .app-wrapper {
+            background: #ffffff;
+            width: 100%;
+            max-width: 850px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .app-header {
+            background-color: var(--primary-clinical);
+            color: #ffffff;
+            padding: 25px 30px;
+            border-bottom: 4px solid var(--primary-accent);
+        }
+
+        .app-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .app-subtitle {
+            margin: 5px 0 0 0;
+            font-size: 0.9rem;
+            color: #a0aec0;
+        }
+
+        .meta-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+            background: #edf2f7;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .dept-tag {
+            background: var(--primary-accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .quiz-body {
+            padding: 30px;
+        }
+
+        .question-box {
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .option-node {
+            background: #ffffff;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-node:hover {
+            border-color: var(--primary-accent);
+            background-color: #f8fafc;
+        }
+
+        .option-node.correct-state {
+            background-color: var(--correct-bg) !important;
+            border-color: var(--correct-green) !important;
+            color: #22543d;
+            font-weight: 600;
+        }
+
+        .option-node.wrong-state {
+            background-color: var(--wrong-bg) !important;
+            border-color: var(--wrong-red) !important;
+            color: #742a2a;
+        }
+
+        .option-node.lock-out {
+            pointer-events: none;
+        }
+
+        .rationales-card {
+            background-color: #ebf8ff;
+            border-left: 4px solid var(--primary-accent);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .interactive-footer {
+            display: flex;
+            justify-content: flex-end;
+            border-top: 1px solid var(--border-color);
+            padding: 20px 30px;
+            background: #f7fafc;
+        }
+
+        .action-btn {
+            background-color: var(--primary-accent);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .action-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .action-btn:disabled {
+            background-color: #cbd5e0;
+            color: #718096;
+            cursor: not-allowed;
+        }
+
+        .summary-view {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .score-metrics {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary-clinical);
+            margin: 15px 0;
+        }
+
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95rem;
+        }
+
+        .metrics-table th, .metrics-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+
+        .metrics-table th {
+            background-color: #edf2f7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-wrapper">
+    <header class="app-header">
+        <h1>General Medical Practitioner and Health Officers Questions</h1>
+        <div class="app-subtitle">Multi-Departmental Proportional Standardized Question Bank By Dr Solomon</div>
+    </header>
+
+    <div class="meta-bar" id="meta-dashboard">
+        <span class="dept-tag" id="current-dept-tag">-</span>
+        <span id="tracker-node">Question 0 of 0</span>
+    </div>
+
+    <main class="quiz-body" id="main-render-engine">
+        <div id="runtime-interface">
+            <div class="question-box" id="active-question-text">Loading Exam Matrix Parameters...</div>
+            <div class="options-grid" id="active-options-box"></div>
+            <div class="rationales-card" id="active-rationale-box"></div>
+        </div>
+
+        <div id="diagnostic-interface" class="summary-view" style="display: none;">
+            <h2>Evaluation Summary Report</h2>
+            <p>The candidate has completed the comprehensive blueprint evaluation with the following score metrics:</p>
+            <div class="score-metrics" id="render-final-score">0%</div>
+            
+            <h3>Departmental Competency Matrix Breakdown</h3>
+            <table class="metrics-table" id="breakdown-table">
+                <thead>
+                    <tr>
+                        <th>Department / Specialty Domain</th>
+                        <th>Target Items</th>
+                        <th>Correct Answers</th>
+                        <th>Domain Competency Rate</th>
+                    </tr>
+                </thead>
+                <tbody id="breakdown-rows"></tbody>
+            </table>
+            <button class="action-btn" onclick="window.location.reload()">Re-initiate Examination</button>
+        </div>
+    </main>
+
+    <footer class="interactive-footer" id="app-footer-actions">
+        <button class="action-btn" id="forward-step-btn" disabled>Next Question</button>
+    </footer>
+</div>
+
+<script>
+    const DEPARTMENTS = {
+        IM: "Internal Medicine",
+        OBGYN: "Gynecology & Obstetrics",
+        PED: "Pediatrics",
+        SURG: "Surgery",
+        BIOSTAT: "Biostatistics & Epidemiology",
+        MGMT: "Leadership & Management"
+    };
+
+    const examQuestionRegistry = [];
+
+    function buildRegistry() {
+        // ==========================================
+        // 1. INTERNAL MEDICINE TEMPLATE MATRICES
+        // ==========================================
+        const imTemplates = [
+            {
+                q: "A patient presents with a persistent cough, night sweats, and weight loss. Sputum smear is positive for Acid-Fast Bacilli (AFB). Two weeks after starting RHZE, the patient develops burning peripheral neuropathy. Which vitamin is deficient?",
+                options: ["Vitamin B1 (Thiamine)", "Vitamin B6 (Pyridoxine)", "Vitamin B12 (Cobalamin)", "Vitamin C"],
+                correctIndex: 1,
+                rationale: "Isoniazid competes with pyridoxine (Vitamin B6) in neural pathways, requiring routine supplementation to prevent peripheral neuropathy."
+            },
+            {
+                q: "A 32-year-old female with chronic Rheumatic Heart Disease presents with severe dyspnea. Physical exam reveals a loud S1 and a mid-diastolic rumbling murmur at the apex. What is the diagnosis?",
+                options: ["Mitral Regurgitation", "Aortic Stenosis", "Mitral Stenosis", "Aortic Regurgitation"],
+                correctIndex: 2,
+                rationale: "A mid-diastolic rumbling murmur at the apex following rheumatic fever is the classic hallmark of Mitral Stenosis."
+            },
+            {
+                q: "A patient with liver cirrhosis presents with worsening ascites. Paracentesis reveals a Serum-Ascites Albumin Gradient (SAAG) of 1.4 g/dL. What does this indicate?",
+                options: ["Peritoneal Tuberculosis", "Portal Hypertension", "Nephrotic Syndrome", "Peritoneal Carcinomatosis"],
+                correctIndex: 1,
+                rationale: "A SAAG score ≥ 1.1 g/dL indicates transudative fluid driven by increased sinusoidal pressure from portal hypertension."
+            },
+            {
+                q: "A young adult presents with altered mental status, deep rapid breathing, and a fruity breath odor. Blood glucose is 480 mg/dL with positive serum ketones. What is the immediate first step?",
+                options: ["Intravenous Insulin bolus", "0.9% Normal Saline fluid resuscitation", "Subcutaneous Insulin pump", "Sodium Bicarbonate infusion"],
+                correctIndex: 1,
+                rationale: "Aggressive fluid volume correction with 0.9% Normal Saline takes precedence in DKA to restore intravascular volume before correcting insulin deficits."
+            },
+            {
+                q: "A hypertensive patient with a serum creatinine of 1.9 mg/dL requires an additional medication to control blood pressure and protect renal function. Which class is preferred?",
+                options: ["Loop Diuretics", "Beta-Blockers", "ACE Inhibitors (ACEi)", "Calcium Channel Blockers"],
+                correctIndex: 2,
+                rationale: "ACE inhibitors or ARBs reduce efferent arteriolar resistance, lowering intraglomerular pressure and slowing down chronic kidney disease progression."
+            },
+            {
+                q: "An HIV-positive patient with a CD4 count of 65 cells/µL presents with neck stiffness and a severe headache. India ink staining reveals encapsulated yeast. What is the diagnosis?",
+                options: ["Pneumocystis jirovecii", "Cryptococcal Meningitis", "Toxoplasmosis", "Cytomegalovirus"],
+                correctIndex: 1,
+                rationale: "An encapsulated budding yeast identified via India ink in an immunocompromised patient is diagnostic for Cryptococcus neoformans."
+            },
+            {
+                q: "An ECG shows acute ST-segment elevations in leads II, III, and aVF. Which myocardial territory is actively ischemic?",
+                options: ["Anterior Wall", "Lateral Wall", "Inferior Wall", "Septal Wall"],
+                correctIndex: 2,
+                rationale: "Leads II, III, and aVF look directly at the diaphragmatic or inferior surface of the heart, usually supplied by the right coronary artery."
+            },
+            {
+                q: "A 65-year-old patient presents with sudden severe left-sided weakness and a flat facial droop. Symptoms started 2 hours ago. Non-contrast head CT rules out hemorrhage. What is the treatment?",
+                options: ["Intravenous Thrombolysis (tPA)", "High-dose Aspirin only", "Immediate Neurosurgery", "Heparin continuous infusion"],
+                correctIndex: 0,
+                rationale: "Ischemic stroke patients presenting within the 4.5-hour therapeutic window without hemorrhagic signs are candidates for tPA."
+            },
+            {
+                q: "A patient presents with high fever, severe joint pain, and a classic 'bullseye' erythema migrans rash after a hike. What is the first-line antibiotic treatment?",
+                options: ["Amoxicillin", "Doxycycline", "Ciprofloxacin", "Azithromycin"],
+                correctIndex: 1,
+                rationale: "Doxycycline is the standard, highly effective empirical treatment for early localized Lyme disease presenting with erythema migrans."
+            },
+            {
+                q: "A patient with a history of deep vein thrombosis presents with sudden onset pleuritic chest pain and acute dyspnea. Tachycardia is noted. What is the gold-standard diagnostic imaging?",
+                options: ["Chest X-ray", "CT Pulmonary Angiography (CTPA)", "Transthoracic Echocardiogram", "Magnetic Resonance Imaging"],
+                correctIndex: 1,
+                rationale: "CTPA allows direct visualization of emboli within the pulmonary arterial tree and is the definitive imaging tool for suspected Pulmonary Embolism."
+            },
+            {
+                q: "A patient with a history of mechanical heart valve replacement presents with a high fever and a new regurgitant murmur. Splinter hemorrhages are noted on the fingernails. What is the most critical diagnostic test to order?",
+                options: ["Serial Blood Cultures", "Chest X-ray", "Serum Creatinine", "Electrocardiogram (ECG)"],
+                correctIndex: 0,
+                rationale: "In suspected Infective Endocarditis, isolating the causative organism via serial blood cultures is paramount to guide targeted antibiotic therapy."
+            },
+            {
+                q: "A patient presents with extreme fatigue, weight gain, cold intolerance, and a sluggish relaxation phase of the deep tendon reflexes. Laboratory evaluation is expected to reveal which profile?",
+                options: ["High TSH, Low Free T4", "Low TSH, High Free T4", "Low TSH, Low Free T4", "Normal TSH, High Free T4"],
+                correctIndex: 0,
+                rationale: "Primary hypothyroidism is characterized by an elevated Thyroid-Stimulating Hormone (TSH) level due to lack of negative feedback from low circulating free T4."
+            },
+            {
+                q: "A 60-year-old heavy smoker presents with progressive exertional dyspnea and a chronic productive cough. Spirometry demonstrates an FEV1/FVC ratio of 0.62 that does not significantly change after bronchodilator use. What is the diagnosis?",
+                options: ["Acute Asthma", "Chronic Obstructive Pulmonary Disease (COPD)", "Idiopathic Pulmonary Fibrosis", "Bronchiectasis"],
+                correctIndex: 1,
+                rationale: "A post-bronchodilator FEV1/FVC ratio of less than 0.70 confirms the presence of persistent, non-reversible airflow limitation characteristic of COPD."
+            },
+            {
+                q: "A patient presents with sharp, retrosternal chest pain that is relieved by leaning forward and worsened by lying flat. An ECG reveals diffuse, widespread ST-segment elevations with PR-segment depressions. What is the diagnosis?",
+                options: ["Acute Myocardial Infarction", "Acute Pericarditis", "Pulmonary Embolism", "Aortic Dissection"],
+                correctIndex: 1,
+                rationale: "Positional chest pain paired with diffuse ST elevations and PR depressions across multiple leads is the classic diagnostic signature of acute pericarditis."
+            },
+            {
+                q: "A patient presents with severe joint pain, swelling, and redness in the first metatarsophalangeal joint that began suddenly overnight. Polarized light microscopy of joint fluid reveals negatively birefringent needle-shaped crystals. What is the diagnosis?",
+                options: ["Pseudogout", "Gouty Arthritis", "Septic Arthritis", "Rheumatoid Arthritis"],
+                correctIndex: 1,
+                rationale: "Monosodium urate crystals causing acute gout present as negatively birefringent, needle-like structures under polarized light microscopy."
+            }
+        ];
+
+        // ==========================================
+        // 2. GYNECOLOGY & OBSTETRICS TEMPLATE MATRICES
+        // ==========================================
+        const obgynTemplates = [
+            {
+                q: "A primigravida at 39 weeks is in regular labor. Her cervix is 6 cm dilated and 90% effaced, with the fetal head at -1 station. What phase of labor is this?",
+                options: ["Latent phase of 1st stage", "Active phase of 1st stage", "Second stage of labor", "Third stage of labor"],
+                correctIndex: 1,
+                rationale: "The active phase of the first stage of labor is defined by accelerated cervical dilation starting at 4-6 cm."
+            },
+            {
+                q: "A multigravida at 33 weeks presents with sudden, heavy, painless vaginal bleeding. The uterus is soft and non-tender on examination. What is the most likely diagnosis?",
+                options: ["Placental Abruption", "Placenta Previa", "Uterine Rupture", "Vasa Previa"],
+                correctIndex: 1,
+                rationale: "Painless bright-red bleeding in the third trimester strongly indicates Placenta Previa; digital vaginal exams are strictly contraindicated."
+            },
+            {
+                q: "A woman delivers a 4.5 kg infant. Minutes after placental extraction, she experiences severe vaginal bleeding. The uterine fundus feels soft, boggy, and displaced. What is the first step?",
+                options: ["Perform an emergent hysterectomy", "Administer Oxytocin and initiate uterine massage", "Pack the vagina with sterile gauze", "Order urgent blood transfusions"],
+                correctIndex: 1,
+                rationale: "Uterine atony is the leading cause of PPH. Initial response demands fundal massage and uterotonic agents like oxytocin."
+            },
+            {
+                q: "A pregnant woman at 34 weeks is brought to triage following a tonic-clonic seizure. Her blood pressure is 175/115 mmHg with severe proteinuria. What is the drug of choice?",
+                options: ["Diazepam", "Phenytoin", "Magnesium Sulfate", "Valproic Acid"],
+                correctIndex: 2,
+                rationale: "Magnesium sulfate is the superior agent for both preventing and treating seizures in eclamptic pregnancies."
+            },
+            {
+                q: "A young woman presents with lower quadrant abdominal pain, spotty vaginal bleeding, and an empty uterus on ultrasound despite a positive beta-hCG. What is the suspected diagnosis?",
+                options: ["Molar Pregnancy", "Ectopic Pregnancy", "Incomplete Abortion", "Pelvic Inflammatory Disease"],
+                correctIndex: 1,
+                rationale: "A positive pregnancy test combined with an empty uterine cavity on transvaginal ultrasound strongly points to an ectopic pregnancy."
+            },
+            {
+                q: "A 26-year-old female presents with foul-smelling, frothy, greenish-yellow vaginal discharge and intense vulvar pruritus. Fine punctate hemorrhages on the cervix are observed. What is the diagnosis?",
+                options: ["Bacterial Vaginosis", "Trichomoniasis", "Vulvovaginal Candidiasis", "Chlamydia trachomatis"],
+                correctIndex: 1,
+                rationale: "Frothy green discharge paired with a 'strawberry cervix' (punctate hemorrhages) is pathognomonic for Trichomonas vaginalis."
+            },
+            {
+                q: "During a routine 28-week ANC visit, an oral glucose tolerance test indicates gestational diabetes. What is the baseline first-line management protocol?",
+                options: ["Start Insulin immediately", "Nutritional modification and lifestyle changes", "Metformin therapy initiation", "Schedule early induction at 36 weeks"],
+                correctIndex: 1,
+                rationale: "Dietary adjustments and regular low-impact exercise serve as the initial management strategy before adding medications for GDM."
+            },
+            {
+                q: "A 48-year-old female complains of hot flashes, night sweats, and irregular menstrual cycles over the past year. What hormone alteration confirms menopause entry?",
+                options: ["Markedly elevated Follicle-Stimulating Hormone (FSH)", "Decreased Luteinizing Hormone (LH)", "Elevated Progesterone levels", "Hyperprolactinemia"],
+                correctIndex: 0,
+                rationale: "As ovarian follicular reserve depletes, estrogen falls, removing negative feedback and resulting in persistently elevated serum FSH."
+            },
+            {
+                q: "A G2P1 woman at 35 weeks presents with severe, constant abdominal pain, dark vaginal bleeding, and a firm, hypertonic, tender uterus. What is the diagnosis?",
+                options: ["Placenta Previa", "Placental Abruption", "Incompetent Cervix", "Normal active labor"],
+                correctIndex: 1,
+                rationale: "Painful vaginal bleeding with a rigid, tender, hypertonic uterus is the classic clinical picture of premature placental separation (abruption)."
+            },
+            {
+                q: "A 23-year-old nullipara presents with chronic pelvic pain that worsens significantly during menstruation and intercourse. Biopsies reveal functional endometrial tissue outside the uterus. What is the condition?",
+                options: ["Adenomyosis", "Endometriosis", "Leiomyoma", "Endometrial Hyperplasia"],
+                correctIndex: 1,
+                rationale: "The presence of functional endometrial glands and stroma outside the uterine cavity describes Endometriosis, causing cyclical pelvic pain."
+            },
+            {
+                q: "A G1P0 woman at 39 weeks of gestation presents with fluid leaking from the vagina. Nitrazine paper turns blue, and a ferning pattern is visible on a microscopic slide. What do these findings confirm?",
+                options: ["Urinary Incontinence", "Premature Rupture of Membranes (PROM)", "Active Mucus Plug Shedding", "Vaginal Candidiasis Infection"],
+                correctIndex: 1,
+                rationale: "An alkaline vaginal pH (turning Nitrazine blue) and microscopic ferning of fluid are definitive indicators of amniotic fluid leak, confirming ROM."
+            },
+            {
+                q: "A 52-year-old female presents with postmenopausal vaginal bleeding. She has a history of obesity and type 2 diabetes. What is the most vital next step to rule out malignancy?",
+                options: ["Transvaginal Ultrasound and Endometrial Biopsy", "Reassurance and repeat evaluation in 6 months", "Empiric Hormone Replacement Therapy", "Hysterosalpingography"],
+                correctIndex: 0,
+                rationale: "Postmenopausal bleeding must always be evaluated promptly using endometrial biopsy and ultrasound to rule out endometrial carcinoma."
+            },
+            {
+                q: "A 30-year-old G3P2 woman at 36 weeks of gestation presents with a blood pressure of 150/95 mmHg on two separate readings. She has no proteinuria, no headaches, and no visual disturbances. What is the classification?",
+                options: ["Severe Preeclampsia", "Gestational Hypertension", "Chronic Hypertension", "Eclampsia"],
+                correctIndex: 1,
+                rationale: "New-onset hypertension appearing after 20 weeks of gestation without proteinuria or severe features is classified as gestational hypertension."
+            },
+            {
+                q: "A 28-year-old female complains of cyclic lower abdominal pain, deep dyspareunia, and painful bowel movements that worsen during menses. Laparoscopy reveals small 'powder-burn' lesions on the peritoneum. What is the condition?",
+                options: ["Adenomyosis", "Endometriosis", "Pelvic Inflammatory Disease", "Ovarian Dermoid Cyst"],
+                correctIndex: 1,
+                rationale: "Endometriosis implants present characteristically on direct laparoscopic visualization as cyclic, dark, or 'powder-burn' peritoneal lesions."
+            },
+            {
+                q: "A G1P0 woman at 10 weeks of gestation presents with severe, unrelenting nausea and vomiting, resulting in a 6% weight loss and ketonuria. What is the diagnosis?",
+                options: ["Physiological Morning Sickness", "Hyperemesis Gravidarum", "Acute Viral Gastroenteritis", "Gestational Trophoblastic Disease"],
+                correctIndex: 1,
+                rationale: "Severe, persistent vomiting in early pregnancy paired with significant weight loss, dehydration, and electrolyte disturbances defines Hyperemesis Gravidarum."
+            }
+        ];
+
+        // ==========================================
+        // 3. PEDIATRICS TEMPLATE MATRICES
+        // ==========================================
+        const pedTemplates = [
+            {
+                q: "An 18-month-old child presents with severe wasting, sparse reddish hair, and generalized pitting edema. Weight-for-height is <-3 Z-score. What type of malnutrition is this?",
+                options: ["Marasmus", "Kwashiorkor", "Nutritional Dwarfing", "Class I Obesity"],
+                correctIndex: 1,
+                rationale: "The presence of bilateral pitting pedal or generalized edema differentiates kwashiorkor from pure marasmic wasting."
+            },
+            {
+                q: "A 2-year-old presents with a high fever, a distinctive barking cough, hoarseness, and inspiratory stridor at rest. What is the most likely viral pathogen?",
+                options: ["Respiratory Syncytial Virus", "Parainfluenza Virus", "Adenovirus", "Influenza B Virus"],
+                correctIndex: 1,
+                rationale: "Parainfluenza virus is the primary causative agent responsible for laryngotracheobronchitis (Croup)."
+            },
+            {
+                q: "A 3-day-old neonate develops yellow skin and sclera. Bilirubin is 7 mg/dL and is entirely unconjugated. The baby is active and feeding well with no blood mismatch. What is the condition?",
+                options: ["Pathological Jaundice", "Biliary Atresia", "Physiological Jaundice", "Neonatal Hepatitis"],
+                correctIndex: 2,
+                rationale: "Unconjugated hyperbilirubinemia appearing after 24 hours without systemic illness features standard physiological neonatal jaundice."
+            },
+            {
+                q: "A 9-month-old infant has watery stools, sunken eyes, and a skin pinch that returns very slowly (>2 seconds). According to IMNCI guidelines, how should you classify this child?",
+                options: ["No Dehydration", "Some Dehydration", "Severe Dehydration", "Persistent Diarrhea"],
+                correctIndex: 2,
+                rationale: "Sunken eyes paired with a skin pinch lasting more than 2 seconds meet the threshold for Severe Dehydration under IMNCI guidelines."
+            },
+            {
+                q: "A 4-year-old child presents with a high fever, muffled voice, drooling, and a preferred forward-leaning 'tripod' position. What is the immediate contraindication?",
+                options: ["Inserting a peripheral IV line", "Examining the throat with a tongue depressor", "Obtaining a lateral neck X-ray", "Administering humidified oxygen"],
+                correctIndex: 1,
+                rationale: "Using a tongue depressor in suspected epiglottitis can trigger fatal, acute laryngospasm and complete airway occlusion."
+            },
+            {
+                q: "A 6-year-old child presents with periorbital edema, dark cola-colored urine, and mild hypertension two weeks after recovering from a skin infection. What is the diagnosis?",
+                options: ["Minimal Change Disease", "Post-Streptococcal Glomerulonephritis (PSGN)", "Polycystic Kidney Disease", "Acute Pyelonephritis"],
+                correctIndex: 1,
+                rationale: "PSGN characteristically presents as a nephritic syndrome (hematuria, edema, hypertension) following a group A streptococcal skin or throat infection."
+            },
+            {
+                q: "A mother brings her 2-month-old infant for routine vaccinations. Which vaccines should be administered at this visit according to standard EPI schedules?",
+                options: ["BCG and Oral Polio Vaccine (OPV) 0 only", "Pentavalent (DPTHepBHiB) 1, OPV 1, PCV 1, and Rotavirus 1", "Measles 1 and Yellow Fever", "Pentavalent 3 and OPV 3"],
+                correctIndex: 1,
+                rationale: "The standard 6-to-8 week milestone introduces the first primary multi-dose infant immunizations (Pentavalent, OPV, Pneumococcal, and Rotavirus)."
+            },
+            {
+                q: "An infant presents with a high fever for 3 days that drops suddenly, followed immediately by the appearance of a maculopapular, rose-pink rash on the trunk. What is the diagnosis?",
+                options: ["Measles (Rubeola)", "Rubella", "Roseola Infantum (Exanthema Subitum)", "Scarlet Fever"],
+                correctIndex: 2,
+                rationale: "Roseola (caused by HHV-6) classically features a high fever that drops dramatically just as a non-pruritic rash emerges."
+            },
+            {
+                q: "A newborn is assessed 1 minute after birth. Heart rate is 110 bpm, respirations are slow and irregular, there is some flexion of extremities, the baby grimaces to nasal suction, and the body is pink with blue extremities. What is the APGAR score?",
+                options: ["4", "6", "8", "10"],
+                correctIndex: 1,
+                rationale: "HR >100 (2), slow resp (1), some flexion (1), grimace (1), acrocyanosis (1) sums up to an APGAR score of 6."
+            },
+            {
+                q: "A 5-year-old child presents with a high fever, conjunctivitis, cracked red lips, a 'strawberry tongue', and desquamation of the hands. What is the primary long-term risk if untreated?",
+                options: ["Glomerulonephritis", "Coronary Artery Aneurysms", "Splenic Rupture", "Permanent Hearing Loss"],
+                correctIndex: 1,
+                rationale: "Kawasaki disease is an acute vasculitis; prompt treatment with IVIG and aspirin is vital to prevent coronary artery aneurysms."
+            },
+            {
+                q: "A 10-month-old infant is brought to the ER with persistent vomiting, colicky abdominal pain during which he draws up his knees, and passage of red 'currant-jelly' stools. What is the most likely diagnosis?",
+                options: ["Acute Appendicitis", "Intussusception", "Meckel's Diverticulum", "Hirschsprung Disease"],
+                correctIndex: 1,
+                rationale: "The triad of sudden colicky pain, an abdominal mass, and currant-jelly stools (blood and mucus) is highly characteristic of intussusception."
+            },
+            {
+                q: "A 3-year-old child presents with a high fever, sore throat, and a distinct bright red rash that feels like sandpaper, accentuated in the skin folds (Pastia's lines). The tongue has a bright red appearance. What is the treatment of choice?",
+                options: ["Oral Penicillin or Amoxicillin", "Intravenous Acyclovir", "Oral Azithromycin", "Supportive care only"],
+                correctIndex: 0,
+                rationale: "Scarlet fever (caused by Group A Streptococcus) presents with a strawberry tongue and sandpaper rash, and responds robustly to penicillin-based therapy."
+            },
+            {
+                q: "A 6-week-old male infant presents with non-bilious, projectile vomiting immediately following every feed. He is visibly dehydrated and a small, firm olive-shaped mass is palpable in the epigastrium. What metabolic derangement is expected?",
+                options: ["Hypokalemic, hypochloremic metabolic alkalosis", "Hyperkalemic metabolic acidosis", "Normal anion gap acidosis", "Respiratory acidosis"],
+                correctIndex: 0,
+                rationale: "Persistent loss of gastric hydrochloric acid and potassium from severe vomiting in hypertrophic pyloric stenosis leads to a classic hypokalemic, hypochloremic metabolic alkalosis."
+            },
+            {
+                q: "A 12-month-old child presents with bowed legs and noticeable thickening of the wrists and ankles. The child has been exclusively breastfed without vitamin supplementation. What is the most likely diagnosis?",
+                options: ["Osteogenesis Imperfecta", "Nutritional Rickets", "Achondroplasia", "Scurvy"],
+                correctIndex: 1,
+                rationale: "Nutritional rickets results from inadequate Vitamin D and calcium intake, manifesting as skeletal deformities like bone bowing and epiphyseal widening."
+            },
+            {
+                q: "A 5-year-old child presents with acute onset of a purpuric rash on the lower extremities, severe joint pain, and colicky abdominal pain following a recent upper respiratory infection. Platelet count is normal. What is the diagnosis?",
+                options: ["Immune Thrombocytopenic Purpura (ITP)", "IgA Vasculitis (Henoch-Schönlein Purpura)", "Thrombotic Thrombocytopenic Purpura (TTP)", "Acute Lymphoblastic Leukemia"],
+                correctIndex: 1,
+                rationale: "Henoch-Schönlein Purpura is an IgA-mediated small vessel vasculitis presenting with non-thrombocytopenic palpable purpura, arthralgias, and abdominal symptoms."
+            }
+        ];
+
+        // ==========================================
+        // 4. SURGERY TEMPLATE MATRICES
+        // ==========================================
+        const surgTemplates = [
+            {
+                q: "A 24-year-old male presents with periumbilical pain that has shifted to the right lower quadrant over 12 hours. Tenderness is sharpest at McBurney's point. What is the diagnosis?",
+                options: ["Acute Cholecystitis", "Acute Appendicitis", "Perforated Peptic Ulcer", "Diverticulitis"],
+                correctIndex: 1,
+                rationale: "Migratory visceral-to-somatic pain localized over the right lower quadrant is the classic clinical presentation of appendicitis."
+            },
+            {
+                q: "An elderly male presents with severe abdominal distension, obstipation, and pain. An X-ray demonstrates a massively dilated loop of large bowel forming a 'coffee bean' sign. What is the diagnosis?",
+                options: ["Intussusception", "Sigmoid Volvulus", "Acute Cholecystitis", "Indirect Inguinal Hernia"],
+                correctIndex: 1,
+                rationale: "The 'coffee bean' or 'bent hourglass' appearance on a plain abdominal film is pathognomonic for Sigmoid Volvulus."
+            },
+            {
+                q: "A 45-year-old female experiences severe, episodic right upper quadrant pain radiating to her right scapula, triggered by fatty meals. Murphy's sign is positive. What is the diagnosis?",
+                options: ["Acute Pancreatitis", "Acute Appendicitis", "Acute Cholecystitis", "Peptic Ulcer Disease"],
+                correctIndex: 2,
+                rationale: "A positive Murphy's sign (arrest of inspiration on RUQ palpation) indicates gallbladder inflammation, usually secondary to gallstones."
+            },
+            {
+                q: "A trauma patient presents with respiratory distress, absent breath sounds on the left, hyperresonance to percussion on the left, and tracheal deviation to the right. What is the immediate treatment?",
+                options: ["Order an emergency chest X-ray", "Perform immediate needle thoracocentesis", "Endotracheal intubation", "Insert a chest tube into the 5th intercostal space"],
+                correctIndex: 1,
+                rationale: "Tension pneumothorax is a clinical diagnosis requiring immediate needle decompression before waiting for an X-ray."
+            },
+            {
+                q: "A 55-year-old male presents with a painful, tense bulge in his groin that can no longer be pushed back into the abdomen. He is vomiting and has high-pitched bowel sounds. What is the management?",
+                options: ["Reassure and recommend an elective outpatient repair", "Attempt forceful manual reduction with sedation", "Perform emergent surgical exploration", "Prescribe high-dose oral laxatives"],
+                correctIndex: 2,
+                rationale: "An incarcerated, strangulated hernia presenting with bowel obstruction symptoms requires immediate emergency surgery to prevent tissue necrosis."
+            },
+            {
+                q: "A patient presents with sudden-onset, severe, 'tearing' back pain and sudden hemodynamic instability. An abdominal ultrasound shows an enlarged aorta measuring 5.5 cm. What is the condition?",
+                options: ["Acute Renal Colic", "Ruptured Abdominal Aortic Aneurysm (AAA)", "Acute Pancreatitis", "Perforated Appendicitis"],
+                correctIndex: 1,
+                rationale: "Severe tearing back pain accompanied by hypotension and a dilated aorta represents a ruptured AAA, requiring emergency surgical intervention."
+            },
+            {
+                q: "A 30-year-old male sustains a severe blunt injury to his right upper abdomen during a fight. He is hypotensive and tachycardic. Localized guarding is found in the RUQ. Which organ is most likely injured?",
+                options: ["Spleen", "Liver", "Stomach", "Urinary Bladder"],
+                correctIndex: 1,
+                rationale: "The liver occupies the right upper quadrant and is highly susceptible to laceration and hemorrhage following blunt abdominal trauma."
+            },
+            {
+                q: "A patient presents with severe epigastric pain that radiates through to the back, accompanied by persistent vomiting. Lipase is three times the upper normal limit. What is the primary diagnosis?",
+                options: ["Acute Cholecystitis", "Acute Pancreatitis", "Perforated Peptic Ulcer", "Surgical Appendicitis"],
+                correctIndex: 1,
+                rationale: "Epigastric pain radiating to the back coupled with significantly elevated serum lipase establishes the diagnosis of acute pancreatitis."
+            },
+            {
+                q: "Following a motor vehicle collision, a driver presents with distended neck veins, muffled heart sounds, and hypotension (Beck's triad). What is the condition?",
+                options: ["Tension Pneumothorax", "Cardiac Tamponade", "Massive Hemothorax", "Neurogenic Shock"],
+                correctIndex: 1,
+                rationale: "Beck's triad (hypotension, jugular venous distension, and muffled heart sounds) points directly to fluid accumulation in the pericardium (cardiac tamponade)."
+            },
+            {
+                q: "A 40-year-old male presents with severe, excruciating unilateral loin pain that radiates down to his groin and inner thigh. He cannot find a comfortable position. What is the diagnosis?",
+                options: ["Acute Appendicitis", "Ureteric Colic (Nephrolithiasis)", "Acute Cholecystitis", "Inguinal Hernia"],
+                correctIndex: 1,
+                rationale: "Colicky loin-to-groin pain reflects smooth muscle spasms of the ureter trying to pass a renal stone."
+            },
+            {
+                q: "A 68-year-old male presents with severe, constant left lower quadrant abdominal pain, fever, and leukocytosis. On physical examination, there is localized tenderness and guarding in the LLQ. What is the diagnostic test of choice?",
+                options: ["Barium Enema", "Colonoscopy", "Contrast-Enhanced CT of the Abdomen/Pelvis", "Abdominal Ultrasound"],
+                correctIndex: 2,
+                rationale: "An abdominal CT scan is the safest and most definitive modality to diagnose acute diverticulitis and assess for complications like abscess or perforation, while colonoscopy is avoided acutely due to perforation risk."
+            },
+            {
+                q: "A patient presents with a hard, painless, expanding lump in the right testicle. On examination, the mass does not transilluminate and cannot be separated from the testis. What is the initial preferred surgical approach?",
+                options: ["Transscrotal Core Needle Biopsy", "Radical Inguinal Orchiectomy", "Transscrotal Incision and Drainage", "Observation and repeat ultrasound in 3 months"],
+                correctIndex: 1,
+                rationale: "Suspected testicular cancer dictates a radical inguinal orchiectomy; transscrotal biopsies or approaches are avoided to prevent altering lymphatic drainage patterns and seeding tumor cells."
+            },
+            {
+                q: "An elderly female with a history of chronic atrial fibrillation presents with sudden-onset, agonizing abdominal pain that is completely out of proportion to the physical examination findings. What is the suspected condition?",
+                options: ["Acute Cholecystitis", "Acute Mesenteric Ischemia", "Perforated Peptic Ulcer", "Ruptured Diverticulum"],
+                correctIndex: 1,
+                rationale: "Acute mesenteric ischemia classically presents with severe, unremitting abdominal pain paired with a benign physical exam, frequently triggered by an embolic event secondary to atrial fibrillation."
+            },
+            {
+                q: "A 42-year-old male presents to the clinic with an operational diagnosis of a primary internal hemorrhoid that prolapses during defecation but requires manual reduction back into the anal canal. What grade is this hemorrhoid?",
+                options: ["Grade I", "Grade II", "Grade III", "Grade IV"],
+                correctIndex: 2,
+                rationale: "Grade III hemorrhoids prolapse past the dentate line during straining or defecation and require manual reduction by the patient."
+            },
+            {
+                q: "A patient presents with high fever, jaundice, and severe right upper quadrant abdominal pain (Charcot's triad). What is the underlying clinical condition?",
+                options: ["Acute Cholecystitis", "Acute Ascending Cholangitis", "Acute Viral Hepatitis", "Amoebic Liver Abscess"],
+                correctIndex: 1,
+                rationale: "Charcot's triad points directly to acute ascending cholangitis, a bacterial infection of the biliary tree usually caused by common bile duct obstruction."
+            }
+        ];
+
+        // ==========================================
+        // 5. BIOSTATISTICS & EPIDEMIOLOGY TEMPLATE MATRICES
+        // ==========================================
+        const biostatTemplates = [
+            {
+                q: "An investigator wants to evaluate the association between an extremely rare disease and a specific historical exposure. Which study design is most efficient?",
+                options: ["Randomized Controlled Trial", "Cohort Study", "Case-Control Study", "Cross-Sectional Study"],
+                correctIndex: 2,
+                rationale: "Case-control studies select participants based on disease status, making them highly efficient and cost-effective for studying rare outcomes."
+            },
+            {
+                q: "A clinical audit tracks 400 post-operative patients over one year and notes that 20 patients developed surgical site infections. What is the incidence proportion?",
+                options: ["2.5%", "5.0%", "10.0%", "20.0%"],
+                correctIndex: 1,
+                rationale: "Incidence proportion is calculated as the number of new cases (20) divided by the total population at risk (400), which equals 5%."
+            },
+            {
+                q: "A diagnostic test correctly identifies 90 out of 100 truly positive diseased individuals. What parameter does this measure reflect?",
+                options: ["Specificity", "Sensitivity", "Positive Predictive Value", "Negative Predictive Value"],
+                correctIndex: 1,
+                rationale: "Sensitivity is the probability that a diagnostic test will correctly identify a true positive case from among those who actually have the disease."
+            },
+            {
+                q: "A study design evaluates both exposure status and disease outcome simultaneously across a population at a single specific point in time. What is this design?",
+                options: ["Cohort Study", "Case-Control Study", "Cross-Sectional Study", "Randomized Controlled Trial"],
+                correctIndex: 2,
+                rationale: "Cross-sectional studies collect data on prevalence, measuring exposures and outcomes concurrently to capture a population snapshot."
+            },
+            {
+                q: "Which statistical measure of central tendency is the most appropriate to report when a numerical dataset contains extreme outliers or is highly skewed?",
+                options: ["Mean", "Median", "Mode", "Variance"],
+                correctIndex: 1,
+                rationale: "The median represents the structural midpoint of data and is less affected by extreme values or skewed distributions than the mean."
+            },
+            {
+                q: "A researcher states that a new drug reduces blood pressure significantly compared to a placebo, with a p-value calculated at 0.02. What does this indicate?",
+                options: ["The null hypothesis is accepted", "There is a 2% probability that the observed difference occurred by random chance alone", "The clinical drug is ineffective", "The study lacks statistical power"],
+                correctIndex: 1,
+                rationale: "A p-value of 0.02 indicates a 2% probability that the observed results occurred under the assumption that the null hypothesis is completely true."
+            },
+            {
+                q: "A tracking system records the total number of existing cases of HIV in a city divided by the total population at a specific point in time. What is this metric?",
+                options: ["Incidence Rate", "Cumulative Incidence", "Point Prevalence", "Attack Rate"],
+                correctIndex: 2,
+                rationale: "Prevalence calculates all active (both old and new) cases within a designated population at a specific point or period in time."
+            },
+            {
+                q: "What type of error is committed if a researcher rejects a null hypothesis that is actually true in the target population?",
+                options: ["Type I Error (Alpha)", "Type II Error (Beta)", "Measurement Error", "Selection Bias"],
+                correctIndex: 0,
+                rationale: "A Type I error occurs when a study finds a statistically significant result or difference when none actually exists (a false positive)."
+            },
+            {
+                q: "A screening test with high specificity is primarily useful for which clinical scenario?",
+                options: ["Screening a large asymptomatic population", "Confirming a diagnosis after an initial positive screening test", "Detecting early signs of mild disease", "Ruling out a disease when results are negative"],
+                correctIndex: 1,
+                rationale: "High specificity minimizes false positives, making a highly specific test ideal for confirming a diagnosis."
+            },
+            {
+                q: "In an epidemiological study, an apparent association between an exposure and an outcome is distorted by a third independent variable related to both. What is this phenomenon?",
+                options: ["Selection Bias", "Recall Bias", "Confounding", "Information Bias"],
+                correctIndex: 2,
+                rationale: "Confounding occurs when an extraneous factor distorts the true relationship between the primary exposure and the disease outcome."
+            },
+            {
+                q: "A newly designed screening test yields a very low number of false-negative results. This structural trait indicates that the test possesses high parameters of what value?",
+                options: ["Specificity", "Sensitivity", "Positive Predictive Value", "Reliability"],
+                correctIndex: 1,
+                rationale: "A highly sensitive test is excellent at identifying true positive cases, meaning it leaves very few active cases undetected (low false negatives)."
+            },
+            {
+                q: "An epidemiological study tracks a group of healthy individuals over a 10-year period based on their exposure to tobacco smoke to monitor the development of cardiovascular disease. What type of study design is this?",
+                options: ["Case-Control Study", "Prospective Cohort Study", "Cross-Sectional Study", "Randomized Controlled Trial"],
+                correctIndex: 1,
+                rationale: "Following an exposed and unexposed group forward in time to track incidence rates of an outcome is the definition of a prospective cohort study."
+            },
+            {
+                q: "A study concludes that a new medication reduces cholesterol levels with a p-value of 0.06. Assuming a standard significance level threshold of 0.05, what should the researchers do?",
+                options: ["Reject the null hypothesis", "Fail to reject the null hypothesis", "Conclude the drug is completely toxic", "Declare the study definitive"],
+                correctIndex: 1,
+                rationale: "Because the calculated p-value (0.06) is above the predefined significance alpha threshold (0.05), the results are not statistically significant, and the study fails to reject the null hypothesis."
+            },
+            {
+                q: "A public health report notes that the correlation coefficient (r) between sugar intake and dental cavities across a population sample is +0.85. How should this relationship be described?",
+                options: ["Weak negative correlation", "Strong positive correlation", "No linear correlation", "Perfect causal proof"],
+                correctIndex: 1,
+                rationale: "An r-value close to +1.0 indicates a strong linear positive relationship, where both variables increase concurrently."
+            },
+            {
+                q: "A researcher selects a control group for a case-control study by matching controls to cases based on age and sex. What is the primary reason for this matching process?",
+                options: ["To eliminate confounding variables", "To increase selection bias", "To reduce the study's sensitivity", "To transition the study into an experimental trial"],
+                correctIndex: 0,
+                rationale: "Matching helps ensure that known extraneous variables (like age or sex) are balanced between groups, eliminating them as potential confounding factors."
+            }
+        ];
+
+        // ==========================================
+        // 6. LEADERSHIP & MANAGEMENT TEMPLATE MATRICES
+        // ==========================================
+        const mgmtTemplates = [
+            {
+                q: "A hospital administrator needs to execute a major systemic overhaul of inventory control procedures and shift the workplace culture. Which leadership style is best?",
+                options: ["Autocratic Leadership", "Laissez-Faire Leadership", "Transformational Leadership", "Transactional Leadership"],
+                correctIndex: 2,
+                rationale: "Transformational leadership focuses on inspiring, motivating, and guiding teams to embrace systemic, long-term organizational change."
+            },
+            {
+                q: "A quality improvement committee needs to identify the underlying structural vulnerabilities that led to a medication dispensing error. Which tool is best?",
+                options: ["Financial Balance Sheet", "Root Cause Analysis (Fishbone Diagram)", "Top-Down Mandate Document", "Randomized Auditing Profile"],
+                correctIndex: 1,
+                rationale: "A Fishbone (Ishikawa) diagram maps out contributing factors across categories to uncover the root systemic causes of an error."
+            },
+            {
+                q: "A team uses a repetitive four-stage framework (Plan-Do-Study-Act) to test small, incremental changes in patient triage processing. What is this framework called?",
+                options: ["The SWOT Matrix", "The PDSA Cycle", "The Gantt Chart Management", "The Balanced Scorecard Approach"],
+                correctIndex: 1,
+                rationale: "The PDSA (Plan-Do-Study-Act) cycle is a core quality improvement model used for testing and implementing rapid, iterative changes."
+            },
+            {
+                q: "A clinical leader wants to assess an organization's Strengths, Weaknesses, Opportunities, and Threats prior to launching a new community healthcare initiative. What tool is this?",
+                options: ["Root Cause Analysis", "SWOT Analysis", "Lean Six Sigma Matrix", "FMEA Assessment"],
+                correctIndex: 1,
+                rationale: "A SWOT analysis provides a clear overview of internal capabilities (strengths/weaknesses) and external dynamics (opportunities/threats)."
+            },
+            {
+                q: "A conflict arises between nursing and laboratory staff regarding turnaround times for urgent blood tests. What is the most constructive conflict resolution strategy?",
+                options: ["Avoiding the problem entirely", "Forcing a unilateral decision from management", "Collaborative problem-solving", "Smoothing over differences without action"],
+                correctIndex: 2,
+                rationale: "Collaboration allows both parties to discuss their operational workflows openly, leading to a sustainable, mutually beneficial solution."
+            },
+            {
+                q: "A medical director wants to minimize resource waste, optimize staff workflows, and remove redundant steps in a busy emergency department. Which management philosophy applies best?",
+                options: ["Bureaucratic Management", "Lean Methodology", "Centralized Command Structure", "Transactional Supervision"],
+                correctIndex: 1,
+                rationale: "Lean methodology centers on maximizing patient value by identifying and eliminating non-value-adding waste from operational processes."
+            },
+            {
+                q: "A hospital reviews its performance using metrics across financial outcomes, patient satisfaction, internal clinical processes, and staff growth. What is this management tool?",
+                options: ["Gantt Chart Tracking", "Fishbone Diagramming", "Balanced Scorecard", "Pareto Analysis"],
+                correctIndex: 2,
+                rationale: "A Balanced Scorecard tracks performance across multiple dimensions beyond financials, offering a comprehensive look at organizational health."
+            },
+            {
+                q: "To ensure safety when introducing high-risk medication storage protocols, an administrator maps out steps to anticipate and prevent potential failures before they happen. What is this preventive method?",
+                options: ["Retrospective Case Review", "Failure Mode and Effects Analysis (FMEA)", "Disciplinary Performance Review", "Utilization Management"],
+                correctIndex: 1,
+                rationale: "FMEA is a proactive, prospective safety tool designed to identify where processes might fail and implement safeguards beforehand."
+            },
+            {
+                q: "A clinic supervisor evaluates workflow data and finds that 80% of patient delays are caused by just 20% of registry steps. Which quality improvement principle does this reflect?",
+                options: ["The Pareto Principle (80/20 Rule)", "The Six Sigma Threshold", "The Deming Circle Plan", "The Bureaucratic Hierarchy Law"],
+                correctIndex: 0,
+                rationale: "The Pareto Principle states that roughly 80% of problems or effects stem from 20% of vital causes, helping teams prioritize improvement efforts."
+            },
+            {
+                q: "A clinical unit implements a new safety checklist. To track compliance over time and identify shifts or trends in staff performance, which visualization tool is most effective?",
+                options: ["Pie Chart", "Static Bar Graph", "Control Chart (Run Chart)", "Venn Diagram"],
+                correctIndex: 2,
+                rationale: "Control charts or run charts plot performance data chronologically, making it easy to identify trends, shifts, or unusual variations over time."
+            },
+            {
+                q: "A medical department wants to map out all the precise sequential steps, wait times, and hands-on actions required for patient discharge to identify process delays. Which quality management tool is best suited for this?",
+                options: ["Value Stream Mapping (Flowcharting)", "SWOT Matrix Analysis", "Balanced Scorecard Review", "Financial Ledger Auditing"],
+                correctIndex: 0,
+                rationale: "Value stream mapping or detailed process flowcharting visually tracks the sequential lifecycle of a workflow to expose bottlenecks and operational delays."
+            },
+            {
+                q: "A clinic leader resolves an ongoing schedule dispute by finding an innovative hybrid staffing pattern that fully satisfies the preferences of both the nursing staff and the medical residents. What conflict resolution method was used?",
+                options: ["Avoiding", "Compromising", "Collaborating (Win-Win)", "Accommodating"],
+                correctIndex: 2,
+                rationale: "Collaboration focuses on working together to find an optimal solution that fully addresses the underlying core needs of all parties involved."
+            },
+            {
+                q: "A quality council adopts a zero-tolerance baseline framework aimed at ensuring medication administration accuracy reaches a standard of fewer than 3.4 defective events per million opportunities. What strategy is this?",
+                options: ["Lean Production Management", "Six Sigma Quality Framework", "Bureaucratic Oversight Strategy", "Total Centralization Approach"],
+                correctIndex: 1,
+                rationale: "The Six Sigma quality framework targets near-perfection by keeping operational defects strictly below a threshold of 3.4 per million opportunities."
+            },
+            {
+                q: "A hospital committee uses a prospective risk management tool to dissect a newly proposed blood-transfusion transport protocol, actively searching for potential failure points before implementation. What is this tool?",
+                options: ["Root Cause Analysis (RCA)", "Failure Mode and Effects Analysis (FMEA)", "Retrospective Peer Review", "Randomized Process Audit"],
+                correctIndex: 1,
+                rationale: "FMEA is a proactive, prospective tool used to predict, analyze, and prevent process failures before they occur in a live clinical setting."
+            },
+            {
+                q: "A clinical team is implementing an updated electronic health record system. The unit leader focuses on creating buy-in, communicating the reasons for the change, and helping staff adapt to the new workflow. What discipline is being practiced?",
+                options: ["Financial Risk Allocation", "Change Management", "Transactional Governance", "Strategic Downsizing"],
+                correctIndex: 1,
+                rationale: "Change management uses structured methodologies to support individuals and teams through organizational transitions, minimizing operational friction."
+            }
+        ];
+
+        // ==========================================
+        // PROGRAMMATIC MULTIPLIER ENGINE FOR TOTAL SCALE
+        // ==========================================
+        function generateDomainItems(templates, domainName, targetCount) {
+            let count = 0;
+            while (count < targetCount) {
+                templates.forEach((template, index) => {
+                    if (count >= targetCount) return;
+                    const iterationId = Math.floor(count / templates.length) + 1;
+                    
+                    examQuestionRegistry.push({
+                        dept: domainName,
+                        q: `[ID: ${domainName.substring(0,3).toUpperCase()}-M${iterationId}-I${index + 1}] ${template.q}`,
+                        options: [...template.options],
+                        correctIndex: template.correctIndex,
+                        rationale: template.rationale
+                    });
+                    count++;
+                });
+            }
+        }
+
+        // Proportional Blueprint Allocations (Total: 450 items)
+        generateDomainItems(imTemplates, DEPARTMENTS.IM, 75);
+        generateDomainItems(obgynTemplates, DEPARTMENTS.OBGYN, 75);
+        generateDomainItems(pedTemplates, DEPARTMENTS.PED, 75);
+        generateDomainItems(surgTemplates, DEPARTMENTS.SURG, 75);
+        generateDomainItems(biostatTemplates, DEPARTMENTS.BIOSTAT, 75);
+        generateDomainItems(mgmtTemplates, DEPARTMENTS.MGMT, 75);
+
+        // Standard Linear Shuffler (Ensures interdisciplinary mix)
+        examQuestionRegistry.sort(() => Math.random() - 0.5);
+    }
+
+    buildRegistry();
+
+    // Engine Tracking Vectors
+    let currentItemIndex = 0;
+    let accumulatedScore = 0;
+    let blockSelectionFlag = false;
+
+    const diagnosticPerformanceTracking = {};
+    Object.values(DEPARTMENTS).forEach(deptName => {
+        diagnosticPerformanceTracking[deptName] = { targetCount: 0, correctCount: 0 };
+    });
+
+    const currentDeptTag = document.getElementById('current-dept-tag');
+    const trackerNode = document.getElementById('tracker-node');
+    const activeQuestionText = document.getElementById('active-question-text');
+    const activeOptionsBox = document.getElementById('active-options-box');
+    const activeRationaleBox = document.getElementById('active-rationale-box');
+    const forwardStepBtn = document.getElementById('forward-step-btn');
+    const runtimeInterface = document.getElementById('runtime-interface');
+    const diagnosticInterface = document.getElementById('diagnostic-interface');
+    const renderFinalScore = document.getElementById('render-final-score');
+    const breakdownRows = document.getElementById('breakdown-rows');
+    const metaDashboard = document.getElementById('meta-dashboard');
+    const appFooterActions = document.getElementById('app-footer-actions');
+
+    examQuestionRegistry.forEach(item => {
+        if(diagnosticPerformanceTracking[item.dept]) {
+            diagnosticPerformanceTracking[item.dept].targetCount++;
+        }
+    });
+
+    function renderActiveQuestion() {
+        blockSelectionFlag = false;
+        forwardStepBtn.disabled = true;
+        activeRationaleBox.style.display = 'none';
+        activeOptionsBox.innerHTML = '';
+
+        const activeItem = examQuestionRegistry[currentItemIndex];
+        
+        currentDeptTag.innerText = activeItem.dept;
+        trackerNode.innerText = `Question ${currentItemIndex + 1} of ${examQuestionRegistry.length}`;
+        activeQuestionText.innerText = activeItem.q;
+
+        activeItem.options.forEach((optionString, indexIdx) => {
+            const btnNode = document.createElement('div');
+            btnNode.className = 'option-node';
+            btnNode.innerText = optionString;
+            btnNode.addEventListener('click', () => evaluateSelectedOption(indexIdx, btnNode));
+            activeOptionsBox.appendChild(btnNode);
+        });
+    }
+
+    function evaluateSelectedOption(chosenIndex, elementRef) {
+        if (blockSelectionFlag) return;
+        blockSelectionFlag = true;
+
+        const activeItem = examQuestionRegistry[currentItemIndex];
+        const siblings = activeOptionsBox.children;
+
+        if (chosenIndex === activeItem.correctIndex) {
+            elementRef.classList.add('correct-state');
+            accumulatedScore++;
+            diagnosticPerformanceTracking[activeItem.dept].correctCount++;
+        } else {
+            elementRef.classList.add('wrong-state');
+            siblings[activeItem.correctIndex].classList.add('correct-state');
+        }
+
+        for (let node of siblings) {
+            node.classList.add('lock-out');
+        }
+
+        activeRationaleBox.innerHTML = `<strong>Domain Evaluation Rationale:</strong> ${activeItem.rationale}`;
+        activeRationaleBox.style.display = 'block';
+        forwardStepBtn.disabled = false;
+    }
+
+    forwardStepBtn.addEventListener('click', () => {
+        currentItemIndex++;
+        if (currentItemIndex < examQuestionRegistry.length) {
+            renderActiveQuestion();
+        } else {
+            compileAndRenderReport();
+        }
+    });
+
+    function compileAndRenderReport() {
+        runtimeInterface.style.display = 'none';
+        metaDashboard.style.display = 'none';
+        appFooterActions.style.display = 'none';
+        diagnosticInterface.style.display = 'block';
+
+        const finalPercentage = Math.round((accumulatedScore / examQuestionRegistry.length) * 100);
+        renderFinalScore.innerText = `${finalPercentage}% (${accumulatedScore}/${examQuestionRegistry.length})`;
+
+        breakdownRows.innerHTML = '';
+        Object.keys(diagnosticPerformanceTracking).forEach(key => {
+            const rowData = diagnosticPerformanceTracking[key];
+            if(rowData.targetCount > 0) {
+                const rate = Math.round((rowData.correctCount / rowData.targetCount) * 100);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${key}</strong></td>
+                    <td>${rowData.targetCount}</td>
+                    <td>${rowData.correctCount}</td>
+                    <td><strong>${rate}%</strong></td>
+                `;
+                breakdownRows.appendChild(tr);
+            }
+        });
+    }
+
+    if (examQuestionRegistry.length > 0) {
+        renderActiveQuestion();
+    } else {
+        activeQuestionText.innerText = "Error: Exam Question Registry dataset array parameters missing.";
+    }
+</script>
+</body>
+</html>
+    
+  </body>
+  
+</html>
